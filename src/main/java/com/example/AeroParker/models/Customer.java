@@ -1,10 +1,12 @@
 package com.example.AeroParker.models;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -17,13 +19,12 @@ import org.joda.time.DateTime;
 public class Customer {
     
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
     @Column
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private DateTime registered;
+    private LocalDateTime registered;
 
     @NotNull
     @Column
@@ -58,13 +59,12 @@ public class Customer {
     @NotNull
     @Column
     private String phone_number;
-    
 
-    public Customer(){
 
+    public Customer() {
     }
 
-    public Customer(Long id, DateTime registered, String email, String title, String first_name, String last_name, String address_line_one, String address_line_two, String city, String postcode, String phone_number) {
+    public Customer(Long id, LocalDateTime registered, String email, String title, String first_name, String last_name, String address_line_one, String address_line_two, String city, String postcode, String phone_number) {
         this.id = id;
         this.registered = registered;
         this.email = email;
@@ -86,11 +86,11 @@ public class Customer {
         this.id = id;
     }
 
-    public DateTime getRegistered() {
+    public LocalDateTime getRegistered() {
         return this.registered;
     }
 
-    public void setRegistered(DateTime registered) {
+    public void setRegistered(LocalDateTime registered) {
         this.registered = registered;
     }
 
@@ -171,7 +171,7 @@ public class Customer {
         return this;
     }
 
-    public Customer registered(DateTime registered) {
+    public Customer registered(LocalDateTime registered) {
         this.registered = registered;
         return this;
     }
@@ -253,5 +253,6 @@ public class Customer {
             ", phone_number='" + getPhone_number() + "'" +
             "}";
     }
+
 
 }

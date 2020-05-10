@@ -1,8 +1,12 @@
 package com.example.AeroParker.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.annotation.PostConstruct;
+
+import com.example.AeroParker.dto.SiteDTO;
 import com.example.AeroParker.models.Site;
 import com.example.AeroParker.repositories.SiteRepository;
 import com.example.AeroParker.services.CsvUtils;
@@ -22,22 +26,29 @@ import antlr.collections.List;
 public class FileController {
     @Autowired
     private SiteRepository siteRepository;
+    @Autowired
+    private CsvUtils csvUtil;
 
     // @PostMapping(value = "/upload", consumes = "text/csv")
     // public void uploadSimple(@RequestBody InputStream body) throws IOException {
     //     siteRepository.saveAll(CsvUtils.read(Site.class, body));
     // }
 
+    @PostConstruct
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
-    public void uploadMultipart(@RequestParam MultipartFile file) throws IOException {
-        // siteRepository.saveAll(CsvUtils.read(Site.class, file.getInputStream()));
+    public void populateSitesWithLocalCSV() {
+        System.out.println(" \n Populating Sites with local CSV");
+        File dest = new File("src/Sites.csv");
+        csvUtil.openFile(dest);
         
-        // CsvUtils.loadObjectList(Site.class, file.getName());
-        for (Site site : CsvUtils.loadObjectList(Site.class, file.getName())) {
+        for (String siteValue : csvUtil.readFileReturnList()) {
+            Site site = new Site();
+            site.setName(siteValue);
             siteRepository.save(site);
         }
-        System.out.println( "object list => "+CsvUtils.loadObjectList(Site.class, file.getOriginalFilename()) );
-        System.out.println( "File name => "+ file.getOriginalFilename() );
 
+        csvUtil.closeFile();
+   
     }
+
 }
