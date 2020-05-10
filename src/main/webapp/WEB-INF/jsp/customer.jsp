@@ -16,7 +16,14 @@
             <div><input type="text" name="field4" placeholder="lastname"></div>
             <div><input type="text" name="field5" placeholder="address-1"></div>
             <div><input type="text" name="field6" placeholder="address-2"></div>
-            <div><input type="text" name="field7" placeholder="city"></div>
+            <div>
+                <%-- <input type="text" name="field7" placeholder="city"> --%>
+                <input list="sites" name="field7" placeholder="city">
+                <datalist id="sites">
+                    <option value="avalon">
+                    <option value="ace-parks">
+                </datalist>
+            </div>
             <div><input type="text" name="field8" placeholder="postcode"></div>
             <div><input type="text" name="field9" placeholder="phonenumber"></div>
 

@@ -24,10 +24,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import antlr.collections.List;
 
 @Controller
 public class HelloController {
@@ -60,7 +60,9 @@ public class HelloController {
     }
 
     @RequestMapping("/register")
-    public String register(Model model, HttpServletRequest reqst) {
+    public String register( 
+        @RequestParam(name = "site", defaultValue = "avalon") String site,
+        Model model, HttpServletRequest reqst) {
         Customer customer = new Customer();
         
         customer.setRegistered(LocalDateTime.now());
@@ -70,7 +72,11 @@ public class HelloController {
         customer.setLast_name(reqst.getParameter("field4"));
         customer.setAddress_line_one(reqst.getParameter("field5"));
         customer.setAddress_line_two(reqst.getParameter("field6"));
-        customer.setCity(reqst.getParameter("field7"));
+        if ( reqst.getParameter("field7").isEmpty()){
+            customer.setCity(site);
+        } else {
+            customer.setCity(reqst.getParameter("field7"));
+        }
         customer.setPostcode(reqst.getParameter("field8"));
         customer.setPhone_number(reqst.getParameter("field9"));
         

@@ -24,11 +24,12 @@ import com.opencsv.CSVReaderBuilder;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.bytebuddy.asm.Advice.Return;
 
-@Component
+@Service
 public class CsvUtils {
     private Scanner scanner;
 

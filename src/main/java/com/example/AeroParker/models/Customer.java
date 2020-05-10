@@ -3,12 +3,7 @@ package com.example.AeroParker.models;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -61,10 +56,20 @@ public class Customer {
     private String phone_number;
 
 
+    @ManyToOne
+    @NotNull
+    @JoinTable(
+    name = "customer_site", 
+    joinColumns = @JoinColumn(name = "customer_id"), 
+    inverseJoinColumns = @JoinColumn(name = "site_id"))
+    private Site site;
+
+    
+
     public Customer() {
     }
 
-    public Customer(Long id, LocalDateTime registered, String email, String title, String first_name, String last_name, String address_line_one, String address_line_two, String city, String postcode, String phone_number) {
+    public Customer(Long id, LocalDateTime registered, String email, String title, String first_name, String last_name, String address_line_one, String address_line_two, String city, String postcode, String phone_number, Site site) {
         this.id = id;
         this.registered = registered;
         this.email = email;
@@ -76,6 +81,7 @@ public class Customer {
         this.city = city;
         this.postcode = postcode;
         this.phone_number = phone_number;
+        this.site = site;
     }
 
     public Long getId() {
@@ -166,6 +172,14 @@ public class Customer {
         this.phone_number = phone_number;
     }
 
+    public Site getSite() {
+        return this.site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
+
     public Customer id(Long id) {
         this.id = id;
         return this;
@@ -221,6 +235,11 @@ public class Customer {
         return this;
     }
 
+    public Customer site(Site site) {
+        this.site = site;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -229,12 +248,12 @@ public class Customer {
             return false;
         }
         Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id) && Objects.equals(registered, customer.registered) && Objects.equals(email, customer.email) && Objects.equals(title, customer.title) && Objects.equals(first_name, customer.first_name) && Objects.equals(last_name, customer.last_name) && Objects.equals(address_line_one, customer.address_line_one) && Objects.equals(address_line_two, customer.address_line_two) && Objects.equals(city, customer.city) && Objects.equals(postcode, customer.postcode) && Objects.equals(phone_number, customer.phone_number);
+        return Objects.equals(id, customer.id) && Objects.equals(registered, customer.registered) && Objects.equals(email, customer.email) && Objects.equals(title, customer.title) && Objects.equals(first_name, customer.first_name) && Objects.equals(last_name, customer.last_name) && Objects.equals(address_line_one, customer.address_line_one) && Objects.equals(address_line_two, customer.address_line_two) && Objects.equals(city, customer.city) && Objects.equals(postcode, customer.postcode) && Objects.equals(phone_number, customer.phone_number) && Objects.equals(site, customer.site);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, registered, email, title, first_name, last_name, address_line_one, address_line_two, city, postcode, phone_number);
+        return Objects.hash(id, registered, email, title, first_name, last_name, address_line_one, address_line_two, city, postcode, phone_number, site);
     }
 
     @Override
@@ -251,6 +270,7 @@ public class Customer {
             ", city='" + getCity() + "'" +
             ", postcode='" + getPostcode() + "'" +
             ", phone_number='" + getPhone_number() + "'" +
+            ", site='" + getSite() + "'" +
             "}";
     }
 
