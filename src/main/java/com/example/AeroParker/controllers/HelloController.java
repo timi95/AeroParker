@@ -15,6 +15,7 @@ import com.example.AeroParker.models.Customer;
 import com.example.AeroParker.models.Site;
 import com.example.AeroParker.repositories.CustomerRepository;
 import com.example.AeroParker.repositories.SiteRepository;
+import com.example.AeroParker.services.CustomerService;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class HelloController {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    CustomerService customerService;
+
     @GetMapping({"/", "/hello"})
     public String hello(
         Model model, 
@@ -52,12 +56,6 @@ public class HelloController {
     public String customer( HttpServletRequest reqst, HttpServletResponse respns,
         @ModelAttribute("customer") Customer customer,
         BindingResult result, ModelMap model ) {
-      
-          
-        
-
-
-        // customerRepository.save(customer);
         
         return "customer";
     }
@@ -66,32 +64,12 @@ public class HelloController {
     public String register( 
         @RequestParam(name = "site", defaultValue = "Avalon City") String site,
         Model model, HttpServletRequest reqst) {
-        Customer customer = new Customer();
-        
-        customer.setRegistered(LocalDateTime.now());
-        customer.setEmail(reqst.getParameter("field1").toLowerCase());
-        customer.setTitle(reqst.getParameter("field2"));
-        customer.setFirst_name(reqst.getParameter("field3"));
-        customer.setLast_name(reqst.getParameter("field4"));
-        customer.setAddress_line_one(reqst.getParameter("field5"));
-        customer.setAddress_line_two(reqst.getParameter("field6"));
-        if ( reqst.getParameter("field7").isEmpty()){
-            customer.setCity(site);
-            customer.setSite(siteRepository.findByName(site).get());
-        } else {
-            site = reqst.getParameter("field7");
-            customer.setCity(site);
-            customer.setSite(siteRepository.findByName(site).get());
-        }
-        customer.setPostcode(reqst.getParameter("field8"));
-        customer.setPhone_number(reqst.getParameter("field9"));
-        
-        
-        customerRepository.save(customer);
-        model.addAttribute("customers", customerRepository.findAll());
-        
-        // System.out.println( reqst.getParameter("field1"));
-        // System.out.println( customer.toString() );
+
+            try {
+                customerService.CustomerRegistration(site, model, reqst);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         
         return "register";
     }
@@ -106,7 +84,6 @@ public class HelloController {
 
     @PostMapping ("/email_exists/{email}")
     public ResponseEntity emailVerify( @PathVariable String email) {
-        // return customerRepository.findByEmail(email).isPresent();
         try {
             return ResponseEntity.ok(customerRepository.findByEmail(email).isPresent());
         } catch (Exception e) {
