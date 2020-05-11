@@ -69,7 +69,7 @@ public class HelloController {
         Customer customer = new Customer();
         
         customer.setRegistered(LocalDateTime.now());
-        customer.setEmail(reqst.getParameter("field1"));
+        customer.setEmail(reqst.getParameter("field1").toLowerCase());
         customer.setTitle(reqst.getParameter("field2"));
         customer.setFirst_name(reqst.getParameter("field3"));
         customer.setLast_name(reqst.getParameter("field4"));
