@@ -18,6 +18,8 @@ import com.example.AeroParker.repositories.SiteRepository;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -61,7 +64,7 @@ public class HelloController {
 
     @RequestMapping("/register")
     public String register( 
-        @RequestParam(name = "site", defaultValue = "avalon") String site,
+        @RequestParam(name = "site", defaultValue = "Avalon City") String site,
         Model model, HttpServletRequest reqst) {
         Customer customer = new Customer();
         
@@ -74,8 +77,11 @@ public class HelloController {
         customer.setAddress_line_two(reqst.getParameter("field6"));
         if ( reqst.getParameter("field7").isEmpty()){
             customer.setCity(site);
+            customer.setSite(siteRepository.findByName(site).get());
         } else {
-            customer.setCity(reqst.getParameter("field7"));
+            site = reqst.getParameter("field7");
+            customer.setCity(site);
+            customer.setSite(siteRepository.findByName(site).get());
         }
         customer.setPostcode(reqst.getParameter("field8"));
         customer.setPhone_number(reqst.getParameter("field9"));
@@ -84,8 +90,8 @@ public class HelloController {
         customerRepository.save(customer);
         model.addAttribute("customers", customerRepository.findAll());
         
-        System.out.println( reqst.getParameter("field1"));
-        System.out.println( customer.toString() );
+        // System.out.println( reqst.getParameter("field1"));
+        // System.out.println( customer.toString() );
         
         return "register";
     }
@@ -96,5 +102,15 @@ public class HelloController {
         model.addAttribute("site", sites);
 
         return "sites";
+    }
+
+    @PostMapping ("/email_exists/{email}")
+    public ResponseEntity emailVerify( @PathVariable String email) {
+        // return customerRepository.findByEmail(email).isPresent();
+        try {
+            return ResponseEntity.ok(customerRepository.findByEmail(email).isPresent());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

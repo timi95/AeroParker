@@ -29,18 +29,12 @@ public class Site {
     private String name;
 
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "site", fetch = FetchType.EAGER)
-    private Set<Customer> customers;
-
-
     public Site() {
     }
 
-    public Site(Long id, String name, Set<Customer> customers) {
+    public Site(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.customers = customers;
     }
 
     public Long getId() {
@@ -59,14 +53,6 @@ public class Site {
         this.name = name;
     }
 
-    public Set<Customer> getCustomers() {
-        return this.customers;
-    }
-
-    public void setCustomers(Set<Customer> customers) {
-        this.customers = customers;
-    }
-
     public Site id(Long id) {
         this.id = id;
         return this;
@@ -74,11 +60,6 @@ public class Site {
 
     public Site name(String name) {
         this.name = name;
-        return this;
-    }
-
-    public Site customers(Set<Customer> customers) {
-        this.customers = customers;
         return this;
     }
 
@@ -90,12 +71,12 @@ public class Site {
             return false;
         }
         Site site = (Site) o;
-        return Objects.equals(id, site.id) && Objects.equals(name, site.name) && Objects.equals(customers, site.customers);
+        return Objects.equals(id, site.id) && Objects.equals(name, site.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, customers);
+        return Objects.hash(id, name);
     }
 
     @Override
@@ -103,10 +84,9 @@ public class Site {
         return "{" +
             " id='" + getId() + "'" +
             ", name='" + getName() + "'" +
-            ", customers='" + getCustomers() + "'" +
             "}";
     }
-   
+
 
    
 

@@ -57,7 +57,6 @@ public class Customer {
 
 
     @ManyToOne
-    @NotNull
     @JoinTable(
     name = "customer_site", 
     joinColumns = @JoinColumn(name = "customer_id"), 

@@ -4,3 +4,14 @@
     border-radius: 25px;
     padding: 5px;
 }
+
+input,select{
+    padding: 5px;
+    border-radius: 25px;
+    border: 1px solid black;
+    margin: 5px;
+}
+
+h1, main {
+    text-align: center;
+}
